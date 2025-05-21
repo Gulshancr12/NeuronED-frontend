@@ -89,7 +89,7 @@ const Profile = () => {
             <h1 className="font-semibold text-gray-900 dark:text-gray-100 ">
               Name:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                {user.name}
+                {user?.name || "Not available"}
               </span>
             </h1>
           </div>
@@ -97,7 +97,7 @@ const Profile = () => {
             <h1 className="font-semibold text-gray-900 dark:text-gray-100 ">
               Email:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                {user.email}
+                {user?.email || "Not available"}
               </span>
             </h1>
           </div>

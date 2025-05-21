@@ -1,12 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_PURCHASE_API = "https://neuroned-backend.onrender.com/api/v1/purchase";
+const COURSE_PURCHASE_API = import.meta.env.VITE_BACKEND_URL + "/api/v1/purchase";
 
 export const purchaseApi = createApi({
   reducerPath: "purchaseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: COURSE_PURCHASE_API,
     credentials: "include",
+    prepareHeaders: (headers) => {
+      headers.set("Content-Type", "application/json");
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     createCheckoutSession: builder.mutation({
@@ -24,7 +28,7 @@ export const purchaseApi = createApi({
     }),
     getPurchasedCourses: builder.query({
       query: () => ({
-        url: `/`,
+        url: "/",
         method: "GET",
       }),
     }),
