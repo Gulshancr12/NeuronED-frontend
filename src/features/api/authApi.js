@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 
 // Use environment variable for base URL
-const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "https://neuroned-backend.onrender.com";
 
 export const authApi = createApi({
   reducerPath: "authApi",

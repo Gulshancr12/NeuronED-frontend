@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Dynamic API URL from environment variables
-const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "https://neuroned-backend.onrender.com";
 
 export const purchaseApi = createApi({
   reducerPath: "purchaseApi",
