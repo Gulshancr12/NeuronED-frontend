@@ -1,58 +1,45 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Dynamic API URL from environment variables
-const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "https://neuroned-backend.onrender.com";
+const COURSE_PROGRESS_API = "https://neuroned-backend.onrender.com/api/v1/progress";
 
 export const courseProgressApi = createApi({
   reducerPath: "courseProgressApi",
-  tagTypes: ["CourseProgress"], 
   baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_API_URL}/api/v1/progress`,
+    baseUrl: COURSE_PROGRESS_API,
     credentials: "include",
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      return headers;
-    }
   }),
   endpoints: (builder) => ({
     getCourseProgress: builder.query({
-      query: (courseId) => `/${courseId}`,
-      providesTags: (result, error, courseId) => 
-        [{ type: "CourseProgress", id: courseId }]
+      query: (courseId) => ({
+        url: `/${courseId}`,
+        method: "GET",
+      }),
     }),
-
     updateLectureProgress: builder.mutation({
       query: ({ courseId, lectureId }) => ({
         url: `/${courseId}/lecture/${lectureId}/view`,
-        method: "POST"
+        method:"POST"
       }),
-      invalidatesTags: (result, error, { courseId }) => 
-        [{ type: "CourseProgress", id: courseId }]
     }),
 
     completeCourse: builder.mutation({
-      query: (courseId) => ({
-        url: `/${courseId}/complete`,
-        method: "POST"
-      }),
-      invalidatesTags: (result, error, courseId) => 
-        [{ type: "CourseProgress", id: courseId }]
+        query:(courseId) => ({
+            url:`/${courseId}/complete`,
+            method:"POST"
+        })
     }),
-
     inCompleteCourse: builder.mutation({
-      query: (courseId) => ({
-        url: `/${courseId}/incomplete`,
-        method: "POST"
-      }),
-      invalidatesTags: (result, error, courseId) => 
-        [{ type: "CourseProgress", id: courseId }]
-    })
-  })
+        query:(courseId) => ({
+            url:`/${courseId}/incomplete`,
+            method:"POST"
+        })
+    }),
+    
+  }),
 });
-
 export const {
-  useGetCourseProgressQuery,
-  useUpdateLectureProgressMutation,
-  useCompleteCourseMutation,
-  useInCompleteCourseMutation
+useGetCourseProgressQuery,
+useUpdateLectureProgressMutation,
+useCompleteCourseMutation,
+useInCompleteCourseMutation
 } = courseProgressApi;
