@@ -56,20 +56,22 @@ const Profile = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      console.log("🟢 Update success:", updateUserData);
+      toast.success(updateUserData?.message || "Profile updated.");
       refetch();
-      toast.success(data.message || "Profile updated.");
     }
+
     if (isError) {
-      toast.error(error.message || "Failed to update profile");
+      console.error("🔴 Update error:", error);
+      toast.error(error?.data?.message || "Failed to update profile");
     }
-  }, [error, updateUserData, isSuccess, isError]);
+  }, [isSuccess, isError, updateUserData, error, refetch]);
 
   if (isLoading) return <h1>Profile Loading...</h1>;
 
   const user = data && data.user;
 
   console.log(user);
-  
 
   return (
     <div className="max-w-4xl mx-auto px-4 my-10">
