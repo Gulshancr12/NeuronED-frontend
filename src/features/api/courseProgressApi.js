@@ -1,45 +1,58 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_PROGRESS_API = "http://localhost:8080/api/v1/progress";
+// Dynamic API URL from environment variables
+const BASE_API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 export const courseProgressApi = createApi({
   reducerPath: "courseProgressApi",
+  tagTypes: ["CourseProgress"], 
   baseQuery: fetchBaseQuery({
-    baseUrl: COURSE_PROGRESS_API,
+    baseUrl: `${BASE_API_URL}/api/v1/progress`,
     credentials: "include",
+    prepareHeaders: (headers) => {
+      headers.set("Content-Type", "application/json");
+      return headers;
+    }
   }),
   endpoints: (builder) => ({
     getCourseProgress: builder.query({
-      query: (courseId) => ({
-        url: `/${courseId}`,
-        method: "GET",
-      }),
+      query: (courseId) => `/${courseId}`,
+      providesTags: (result, error, courseId) => 
+        [{ type: "CourseProgress", id: courseId }]
     }),
+
     updateLectureProgress: builder.mutation({
       query: ({ courseId, lectureId }) => ({
         url: `/${courseId}/lecture/${lectureId}/view`,
-        method:"POST"
+        method: "POST"
       }),
+      invalidatesTags: (result, error, { courseId }) => 
+        [{ type: "CourseProgress", id: courseId }]
     }),
 
     completeCourse: builder.mutation({
-        query:(courseId) => ({
-            url:`/${courseId}/complete`,
-            method:"POST"
-        })
+      query: (courseId) => ({
+        url: `/${courseId}/complete`,
+        method: "POST"
+      }),
+      invalidatesTags: (result, error, courseId) => 
+        [{ type: "CourseProgress", id: courseId }]
     }),
+
     inCompleteCourse: builder.mutation({
-        query:(courseId) => ({
-            url:`/${courseId}/incomplete`,
-            method:"POST"
-        })
-    }),
-    
-  }),
+      query: (courseId) => ({
+        url: `/${courseId}/incomplete`,
+        method: "POST"
+      }),
+      invalidatesTags: (result, error, courseId) => 
+        [{ type: "CourseProgress", id: courseId }]
+    })
+  })
 });
+
 export const {
-useGetCourseProgressQuery,
-useUpdateLectureProgressMutation,
-useCompleteCourseMutation,
-useInCompleteCourseMutation
+  useGetCourseProgressQuery,
+  useUpdateLectureProgressMutation,
+  useCompleteCourseMutation,
+  useInCompleteCourseMutation
 } = courseProgressApi;
